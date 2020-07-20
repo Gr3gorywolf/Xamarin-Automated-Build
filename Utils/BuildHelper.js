@@ -4,7 +4,7 @@ function MoveBuiltApk(config, project) {
   var buildDir = `${config.outputPath}/${project.outputName}`;
   let apkFile = "";
   fs.readdirSync(buildDir).forEach((file) => {
-    if (file.endsWith(".apk")) {
+    if (file.endsWith("Signed.apk")) {
       apkFile = file;
     }
   });
@@ -14,25 +14,23 @@ function MoveBuiltApk(config, project) {
   }
   try {
     fs.mkdirSync(apkDir);
+    dist = fs.copyFileSync(
+      `${buildDir}/${apkFile}`,
+      `${apkDir}/${project.outputName}.apk`
+    );
   } catch (ex) {}
-  dist = fs.copyFileSync(
-    `${buildDir}/${apkFile}`,
-    `${apkDir}/${project.outputName}.apk`
-  );
 }
 
 function PatchFiles(project) {
-
-   
   if (project.patchFiles != undefined && project.patchFiles != null) {
     for (let patch of project.patchFiles) {
       if (patch.from !== undefined && patch.to !== undefined) {
-        if(fs.existsSync(patch.from) && fs.existsSync(patch.to)){
-            fs.copyFileSync(patch.from,patch.to);
+        if (fs.existsSync(patch.from) && fs.existsSync(patch.to)) {
+          fs.copyFileSync(patch.from, patch.to);
         }
       }
     }
   }
 }
 
-module.exports = { MoveBuiltApk,PatchFiles };
+module.exports = { MoveBuiltApk, PatchFiles };
