@@ -1,0 +1,18 @@
+{
+    "outputPath": "<msbuild output full path>",
+    "apkDir": "<apk output (optional)>",
+    "projects": [{
+            "outputName": "<app name>",
+            "path": "<project full path>/<project file>.csproj",
+            "mustSignApk": true,
+            "patchFiles": [{
+                "from": "<file to replace by>",
+                "to": "<file to replace>"
+            }]
+
+        }
+    ],
+    "keystorePath": "<keystore full path>.keystore",
+    "keystoreAlias": "<keystore alias>",
+    "keystorePass": "<keystore password>"
+}
