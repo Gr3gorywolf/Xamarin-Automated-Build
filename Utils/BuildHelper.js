@@ -1,9 +1,10 @@
 var fs = require("fs");
 
 function MoveBuiltApk(config, project) {
-  var buildDir = `${config.outputPath}/${project.outputName}`;
+  var outputPath =
+    project.outputPath !== undefined ? project.outputPath : `${config.outputPath}/${project.outputName}`;
   let apkFile = "";
-  fs.readdirSync(buildDir).forEach((file) => {
+  fs.readdirSync(outputPath).forEach((file) => {
     if (file.endsWith("Signed.apk")) {
       apkFile = file;
     }
@@ -14,11 +15,11 @@ function MoveBuiltApk(config, project) {
   }
   try {
     fs.mkdirSync(apkDir);
-    dist = fs.copyFileSync(
-      `${buildDir}/${apkFile}`,
-      `${apkDir}/${project.outputName}.apk`
-    );
   } catch (ex) {}
+  dist = fs.copyFileSync(
+    `${outputPath}/${apkFile}`,
+    `${apkDir}/${project.outputName}.apk`
+  );
 }
 
 function PatchFiles(project) {

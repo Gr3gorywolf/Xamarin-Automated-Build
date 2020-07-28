@@ -18,10 +18,13 @@ for (let project of config.projects) {
       project
     )}`,
     onBeforeCall: function(){
+         console.log(`building:${project.outputName}`);
          PatchFiles(project);
     },
-    callBack: function () {
-      MoveBuiltApk(config,project);
+    callBack: function () { 
+      if(project.mustSignApk == true){
+        MoveBuiltApk(config,project);
+      }
     },
   });
 }

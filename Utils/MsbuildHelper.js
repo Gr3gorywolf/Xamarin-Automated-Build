@@ -1,6 +1,9 @@
 
  function GetMsBuildParams(config,project){
-    return `msbuild.exe ${project.mustSignApk?getCompilationParams(config):''} "/t:restore"   "/p:Configuration=Release" "/p:OutputPath=${config.outputPath}/${project.outputName}"  "${project.path}"
+    let mustRestore = project.mustRestore === undefined? false:project.mustRestore;
+    let mustRebuild = project.mustRebuild === undefined? false:project.mustRebuild;
+    var outputPath = project.outputPath !== undefined? project.outputPath : `${config.outputPath}/${project.outputName}`;
+    return `msbuild.exe ${project.mustSignApk?getCompilationParams(config):''} ${mustRestore?"/t:restore":''} ${mustRebuild?'/t:clean;build':''}  "/p:Configuration=Release" "/p:OutputPath=${outputPath}"  "${project.path}"
             `
 }
 

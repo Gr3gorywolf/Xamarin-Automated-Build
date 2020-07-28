@@ -4,6 +4,9 @@
     "projects": [{
             "outputName": "<app name>",
             "path": "<project full path>/<project file>.csproj",
+            "outputPath": <overrides default output path (optional)>
+            "mustRestore":<(true,false) Restores packages before build (optional)>
+            "mustRebuild":<(true,false)Force project rebuilding>
             "mustSignApk": true,
             "patchFiles": [{
                 "from": "<file to replace by>",

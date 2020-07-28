@@ -15,7 +15,7 @@ function RunProcess(toRun) {
   toRun.onBeforeCall();
   let process = exec(toRun.command);
   process.stdout.on("data", function (data) {
-    console.log(data);
+   // console.log(data);
   });
   process.stdout.on("end", function () {
     toRun.callBack();
