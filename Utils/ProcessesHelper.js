@@ -12,10 +12,14 @@ function RunProcess(toRun) {
   if (toRun == null) {
     return;
   }
-  toRun.onBeforeCall();
-  let process = exec(toRun.command);
+  if(toRun.onBeforeCall !== undefined){
+    toRun.onBeforeCall();
+  }
+  let process = exec(toRun.command.replace(/\n/g, ""));
   process.stdout.on("data", function (data) {
-   // console.log(data);
+    if(toRun.onLog !== undefined){
+      toRun.onLog(data);
+    }
   });
   process.stdout.on("end", function () {
     toRun.callBack();

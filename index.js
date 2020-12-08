@@ -4,7 +4,10 @@ const { GetMsBuildParams } = require("./Utils/MsbuildHelper");
 const { RunProcesses} = require("./Utils/ProcessesHelper");
 const { MoveBuiltApk,PatchFiles }  = require("./Utils/BuildHelper");
 const { clear } = require("console");
-
+const ora = require('ora');
+let loader = ora('Initializing...').start();
+let log = "";
+loader.color ="blue";
 if (!fs.existsSync("./config.json")) {
   console.log("No configuration file detected");
   return;
@@ -12,13 +15,17 @@ if (!fs.existsSync("./config.json")) {
 var config = JSON.parse(fs.readFileSync("./config.json"));
 var callStack = [];
 for (let project of config.projects) {
-  callStack.push({
+  let processToRun = {
     command: `${GetMsBuildParams(
       config,
       project
     )}`,
+    onLog:function(logData){
+     log+= logData;
+     loader.text = `${ log.slice(log.length-1500,log.length).padEnd(1500,' ')}\n\n`;
+    },
     onBeforeCall: function(){
-         console.log(`building:${project.outputName}`);
+         loader.prefixText = `building:${project.outputName}\n\n`;
          PatchFiles(project);
     },
     callBack: function () { 
@@ -26,6 +33,7 @@ for (let project of config.projects) {
         MoveBuiltApk(config,project);
       }
     },
-  });
+  };
+  callStack.push(processToRun);
 }
 RunProcesses(callStack);
